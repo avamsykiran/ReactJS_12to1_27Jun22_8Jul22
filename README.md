@@ -302,7 +302,7 @@ ReactJS
 
         state is always being monitored and as and when the state changes, the compoent is rendered again.
 
-        this.setState(partialState) used to pass cahgnes to the current state, each time
+        this.setState(partialState) used to pass changes to the current state, each time
         setState method is called a new state object is created and the older state is replaced, and
         the render() method is triggered.
 

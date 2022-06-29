@@ -1,4 +1,5 @@
 import {Component} from 'react';
+import TxnForm from './Txnform';
 
 class IncomeStatement extends Component {
     constructor(props){
@@ -17,10 +18,61 @@ class IncomeStatement extends Component {
         };
     }
 
+    delTxn = txnId => {
+        this.setState({txns: this.state.txns.filter(t => t.id!==txnId)});
+    };
+
+    addTxn = txn => {
+        this.setState({txns:[...this.state.txns,txn]});
+    }
+
     render(){
+        let txns = this.state.txns;
+
         return (
             <section className='container-fluid p-4'>
                 <h4>Income Statement</h4>
+
+                {(!txns || txns.length===0) && 
+                    <div className='alert alert-info p-3'>
+                        <strong>No Transactiosn recorded!</strong>
+                    </div>
+                }
+                
+                {(txns && txns.length>0) && 
+                    <table className='table table-bordered table-hover table striped'>
+                        <thead>
+                            <tr>
+                                <th>Txn#</th>
+                                <th>TxnDate</th>
+                                <th>Description</th>
+                                <th>Credit</th>
+                                <th>Debit</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <TxnForm doAddTxn={this.addTxn} />
+                            {txns.map(t => (
+                                <tr key={t.id}>
+                                    <td className='text-end'>{t.id}</td>
+                                    <td className='text-center'>{t.dot.toLocaleDateString()}</td>
+                                    <td>{t.desp}</td>
+                                    <td className='text-end'>{t.type==='CREDIT'?t.amount:''}</td>
+                                    <td className='text-end'>{t.type==='DEBIT'?t.amount:''}</td>
+                                    <td>
+                                        <button 
+                                            type="button" 
+                                            className='btn btn-sm btn-danger'
+                                            onClick={event => this.delTxn(t.id)}>
+                                            DELETE
+                                        </button>
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                }
             </section>
         );
     }
