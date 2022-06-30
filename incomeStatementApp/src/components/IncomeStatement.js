@@ -1,5 +1,6 @@
 import {Component} from 'react';
-import TxnForm from './Txnform';
+import TxnForm from './TxnForm';
+import TxnRow from './TxnRow';
 
 class IncomeStatement extends Component {
     constructor(props){
@@ -24,6 +25,18 @@ class IncomeStatement extends Component {
 
     addTxn = txn => {
         this.setState({txns:[...this.state.txns,txn]});
+    }  
+    
+    saveTxn = txn => {
+        this.setState({txns:this.state.txns.map(t => t.id!==txn.id?t:{...txn,editable:undefined})});
+    }
+
+    markEditable = txnId => {
+        this.setState({txns:this.state.txns.map(t => t.id!==txnId?t:{...t,editable:true})});
+    }
+
+    unmarkEditable = txnId => {
+        this.setState({txns:this.state.txns.map(t => t.id!==txnId?t:{...t,editable:undefined})});
     }
 
     render(){
@@ -53,22 +66,10 @@ class IncomeStatement extends Component {
                         </thead>
                         <tbody>
                             <TxnForm doAddTxn={this.addTxn} />
-                            {txns.map(t => (
-                                <tr key={t.id}>
-                                    <td className='text-end'>{t.id}</td>
-                                    <td className='text-center'>{t.dot.toLocaleDateString()}</td>
-                                    <td>{t.desp}</td>
-                                    <td className='text-end'>{t.type==='CREDIT'?t.amount:''}</td>
-                                    <td className='text-end'>{t.type==='DEBIT'?t.amount:''}</td>
-                                    <td>
-                                        <button 
-                                            type="button" 
-                                            className='btn btn-sm btn-danger'
-                                            onClick={event => this.delTxn(t.id)}>
-                                            DELETE
-                                        </button>
-                                    </td>
-                                </tr>
+                            {txns.map(txn => (
+                                txn.editable?
+                                    <TxnForm key={txn.id} t={txn} isEditing={true} doSaveTxn={this.saveTxn} unmarkEditable={this.unmarkEditable}/> :
+                                    <TxnRow key={txn.id} t={txn} delTxn={this.delTxn} markEditable={this.markEditable} />                
                             ))}
                         </tbody>
                     </table>
