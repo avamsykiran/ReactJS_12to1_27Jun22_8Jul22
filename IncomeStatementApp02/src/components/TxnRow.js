@@ -1,3 +1,5 @@
+import {connect} from 'react-redux';
+import {createMarkEditTxnAction,createDelTxnAction} from '../reducer/ActionFactory';
 
 const TxnRow = ({t,delTxn,markEditable}) => (
     <tr>
@@ -23,4 +25,10 @@ const TxnRow = ({t,delTxn,markEditable}) => (
     </tr>
 );
 
-export default TxnRow;
+const mapStateToProps = null;
+const mapDispatchToProps = dispatch => ({
+    delTxn : txnId => dispatch(createDelTxnAction(txnId)),
+    markEditable : txnId => dispatch(createMarkEditTxnAction(txnId))
+});
+
+export default connect(mapStateToProps,mapDispatchToProps)(TxnRow);

@@ -3,11 +3,18 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import {Provider} from 'react-redux';
+import {createStore} from 'redux';
+import TxnsReducer from './reducer/TxnsReducer';
+
+let incomeStatementStore = createStore(TxnsReducer);
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <App />
+    <Provider store={incomeStatementStore}>
+      <App />
+    </Provider>
   </React.StrictMode>
 );
 

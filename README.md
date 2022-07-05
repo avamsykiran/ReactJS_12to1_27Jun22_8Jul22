@@ -480,7 +480,7 @@ ReactJS
             mapDisptachToProps  is a function that maps 'dispatch calls' to
                                     event handlers of the component.
                                     params: disptach
-                                    return: a json object containing event ahdnling
+                                    return: a json object containing event handling
                                             functions
 
             highOrderComponent returned by connect
@@ -494,13 +494,13 @@ ReactJS
                 |-----------mapStateToProps,mapDispathToProps----------------------->   component2
                 |                  (supply the state and dispatch)                            |
                 |                                                                             |
-            store  -----------mapStateToProps,mapDispathToProps------>   component1           |
+            store ---------------mapStateToProps,mapDispathToProps------>   component1        |
                 |                 (supply the state and dispatch)                 |           |
                 |                                                                 |           |
                 |                                                                 |        dispatch(action)
-                |                                                                 |           |
-                |                                                         dispatch(action)    |
-                |                                                                 |           |
+                | --------------------------------|                               |           |
+                |                                 |                       dispatch(action)    |
+                |                                 ↓ (old state)                   |           |
                 |<------modified state ---------- reducer <-----(action)-----------           |
                                                     | <--------(action)----------------------
 

@@ -1,4 +1,6 @@
 import {  useState } from "react";
+import {connect} from 'react-redux';
+import {createAddTxnAction,createSaveTxnAction,createUnMarkEditTxnAction} from '../reducer/ActionFactory';
 
 const TxnForm = ({ isEditing, t, doAddTxn, doSaveTxn, unmarkEditable }) => {
 
@@ -78,4 +80,12 @@ const TxnForm = ({ isEditing, t, doAddTxn, doSaveTxn, unmarkEditable }) => {
     );
 };
 
-export default TxnForm;
+
+const mapStateToProps = null;
+const mapDispatchToProps = dispatch => ({
+    doAddTxn: txn => dispatch(createAddTxnAction(txn)), 
+    doSaveTxn: txn => dispatch(createSaveTxnAction(txn)),
+    unmarkEditable: txnId => dispatch(createUnMarkEditTxnAction(txnId))
+});
+
+export default connect(mapStateToProps,mapDispatchToProps)(TxnForm);
