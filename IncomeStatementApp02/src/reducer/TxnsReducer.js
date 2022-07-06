@@ -13,7 +13,7 @@ const cumulate = (txns,txnType) => {
     return sum;
 }; 
 
-const initState() => ({
+const initState = () => ({
     txns: [
         { id: 1, desp: 'Salary', type: 'CREDIT', amount: 67000, dot: new Date('2020-06-01') },
         { id: 2, desp: 'Rent', type: 'DEBIT', amount: 7000, dot: new Date('2020-06-01') },
@@ -35,16 +35,16 @@ const TxnsReducer = (oldState=initState(),action) => {
             txns = [...oldState.txns,action.txn];
             break;
         case SAVE_TXN:
-            txns = oldState.txns.map(t => t.id!==action.txn.id?t:{...action.txn,editable:undefined});
+            txns = oldState.txns.map(t => t.id!=action.txn.id?t:{...action.txn,editable:undefined});
             break;
         case DEL_TXN:
-            txns = oldState.txns.filter(t => t.id!==action.txnid);
+            txns = oldState.txns.filter(t => t.id!=action.txnId);
             break;
         case MARK_EDIT_TXN:
-            txns = oldState.txns.map(t => t.id!==action.txnid?t:{...t,editable:true});
+            txns = oldState.txns.map(t => t.id!=action.txnId?t:{...t,editable:true});
             break;
         case UNMARK_EDIT_TXN:
-            txns = oldState.txns.map(t => t.id!==action.txnid?t:{...t,editable:undefined});
+            txns = oldState.txns.map(t => t.id!=action.txnId?t:{...t,editable:undefined});
             break;
         default:
             txns = [...oldState.txns];
@@ -54,6 +54,7 @@ const TxnsReducer = (oldState=initState(),action) => {
     let totalCredit = cumulate(txns,"CREDIT");
     let totalDebit = cumulate(txns,"DEBIT");
     let balance = totalCredit - totalDebit;
+
     return {txns,totalCredit,totalDebit,balance};
 
 };

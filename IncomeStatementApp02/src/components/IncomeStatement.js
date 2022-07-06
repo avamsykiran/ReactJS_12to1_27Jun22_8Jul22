@@ -1,6 +1,7 @@
 import TxnForm from './TxnForm';
 import TxnRow from './TxnRow';
 import {connect} from 'react-redux';
+import TxnSummary from './TxnSummary';
 
 const IncomeStatement = ({ txns }) => (
     <section className='container-fluid p-4'>
@@ -32,6 +33,9 @@ const IncomeStatement = ({ txns }) => (
                             <TxnRow key={txn.id} t={txn} />
                     ))}
                 </tbody>
+                <tfoot>
+                    <TxnSummary />
+                </tfoot>
             </table>
         }
     </section>

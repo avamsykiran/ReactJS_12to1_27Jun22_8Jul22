@@ -1,0 +1,25 @@
+{
+    "txns": [
+        {
+            "id": 1,
+            "desp": "Salary",
+            "type": "CREDIT",
+            "amount": 67000,
+            "dot": "2020-06-01"
+        },
+        {
+            "id": 2,
+            "desp": "Rent",
+            "type": "DEBIT",
+            "amount": 7000,
+            "dot": "2020-06-01"
+        },
+        {
+            "id": 3,
+            "desp": "Fuel",
+            "type": "DEBIT",
+            "amount": 3000,
+            "dot": "2020-06-02"
+        }
+    ]
+}

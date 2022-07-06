@@ -1,4 +1,4 @@
-import { ADD_TXN, DEL_TXN, MARK_EDIT_TXN, SAVE_TXN, UNMARK_EDIT_TXN } from "./actionTypes";
+import { ADD_TXN, DEL_TXN, MARK_EDIT_TXN, SAVE_TXN, UNMARK_EDIT_TXN } from "./ActionTypes";
 
 export const createAddTxnAction = txn => ({ type: ADD_TXN,txn });
 export const createDelTxnAction = txnId => ({ type: DEL_TXN,txnId });

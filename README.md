@@ -502,15 +502,14 @@ ReactJS
                 |                                 |                       dispatch(action)    |
                 |                                 ↓ (old state)                   |           |
                 |<------modified state ---------- reducer <-----(action)-----------           |
-                                                    | <--------(action)----------------------
-
+                                                      | <--------(action)----------------------
 
     json-server
     -----------------------------------------------------------------------
 
         is a javascript tool that can generate fake rest endpoints
         from a .json file, only for the sake of practising
-        rest api calsls, -NOT FOR REAL TIME PURPOISE.
+        rest api calsls, -NOT FOR REAL TIME PURPOSE.
 
         npm install json-server --save
 
