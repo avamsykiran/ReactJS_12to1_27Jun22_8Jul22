@@ -553,7 +553,7 @@ ReactJS
                 |                                                                 |
                 |                                                         --------------------
                 |                                          (action object)|                  |(actionFucntion)
-                |                                                         |                  |
+                |                                                         |                  |that function will be invoked
                 |<------modified state ---------- reducer <-----(action)--|                  |
                                                         | <---(action indicating WAIT)-------|
                                                         |                           -----------------------

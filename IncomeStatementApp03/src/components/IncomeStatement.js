@@ -1,32 +1,39 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import TxnForm from './TxnForm';
 import TxnRow from './TxnRow';
 
-const IncomeStatement = (props) => {
-    let [txns, setTxns] = useState(
-        [
-            { id: 1, desp: 'Salary', type: 'CREDIT', amount: 67000, dot: new Date('2020-06-01') },
-            { id: 2, desp: 'Rent', type: 'DEBIT', amount: 7000, dot: new Date('2020-06-01') },
-            { id: 3, desp: 'Fuel', type: 'DEBIT', amount: 3000, dot: new Date('2020-06-02') },
-            { id: 4, desp: 'Bonus', type: 'CREDIT', amount: 27000, dot: new Date('2020-06-03') },
-            { id: 5, desp: 'Bithday Party', type: 'DEBIT', amount: 6700, dot: new Date('2020-06-03') },
-            { id: 6, desp: 'Mutual Funds Divident', type: 'CREDIT', amount: 7800, dot: new Date('2020-06-04') },
-            { id: 7, desp: 'Mobile Recharge', type: 'DEBIT', amount: 999, dot: new Date('2020-06-04') },
-            { id: 8, desp: 'Grocerries', type: 'DEBIT', amount: 21000, dot: new Date('2020-06-05') }
-        ]
-    );
+import * as txnService from '../service/TxnsService';
 
+const IncomeStatement = (props) => {
+    let [txns, setTxns] = useState(null);
+    let [errMsg, setErrMsg] = useState(null);
+
+    const loadData = () => {
+        txnService.getAllTxns().then(
+            resp => setTxns(resp.data.map(t => ({...t,dot:new Date(t.dot)}))),
+            err => { console.error(err); setErrMsg("Unable to load data as of now..."); }
+        );
+    };
 
     const delTxn = txnId => {
-        setTxns(txns.filter(t => t.id !== txnId));
+        txnService.delTxn(txnId).then(
+            resp => loadData(),
+            err => { console.error(err); setErrMsg("Unable to delete data as of now..."); }
+        );
     };
 
     const addTxn = txn => {
-        setTxns([...txns, txn]);
+        txnService.addTxn(txn).then(
+            resp => loadData(),
+            err => { console.error(err); setErrMsg("Unable to add data as of now..."); }
+        );
     }
 
     const saveTxn = txn => {
-        setTxns(txns.map(t => t.id !== txn.id ? t : { ...txn, editable: undefined }));
+        txnService.saveTxn({ ...txn, editable: undefined }).then(
+            resp => loadData(),
+            err => { console.error(err); setErrMsg("Unable to modify data as of now..."); }
+        );
     }
 
     const markEditable = txnId => {
@@ -37,38 +44,51 @@ const IncomeStatement = (props) => {
         setTxns(txns.map(t => t.id !== txnId ? t : { ...t, editable: undefined }));
     }
 
+    useEffect(loadData, []);
+
     return (
         <section className='container-fluid p-4'>
             <h4>Income Statement</h4>
 
-            {(!txns || txns.length === 0) &&
+            {(!txns && !errMsg) &&
+                <div className='alert alert-info p-3'>
+                    <strong>Please wait while laoding data...</strong>
+                </div>
+            }
+
+            {errMsg &&
+                <div className='alert alert-danger p-3'>
+                    <strong>{errMsg}</strong>
+                </div>
+            }
+
+            {(txns && txns.length === 0) &&
                 <div className='alert alert-info p-3'>
                     <strong>No Transactiosn recorded!</strong>
                 </div>
             }
 
-            {(txns && txns.length > 0) &&
-                <table className='table table-bordered table-hover table striped'>
-                    <thead>
-                        <tr>
-                            <th>Txn#</th>
-                            <th>TxnDate</th>
-                            <th>Description</th>
-                            <th>Credit</th>
-                            <th>Debit</th>
-                            <th></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <TxnForm doAddTxn={addTxn} />
-                        {txns.map(txn => (
-                            txn.editable ?
-                                <TxnForm key={txn.id} t={txn} isEditing={true} doSaveTxn={saveTxn} unmarkEditable={unmarkEditable} /> :
-                                <TxnRow key={txn.id} t={txn} delTxn={delTxn} markEditable={markEditable} />
-                        ))}
-                    </tbody>
-                </table>
-            }
+            <table className='table table-bordered table-hover table striped'>
+                <thead>
+                    <tr>
+                        <th>Txn#</th>
+                        <th>TxnDate</th>
+                        <th>Description</th>
+                        <th>Credit</th>
+                        <th>Debit</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <TxnForm doAddTxn={addTxn} />
+                    {(txns && txns.length > 0) && txns.map(txn => (
+                        txn.editable ?
+                            <TxnForm key={txn.id} t={txn} isEditing={true} doSaveTxn={saveTxn} unmarkEditable={unmarkEditable} /> :
+                            <TxnRow key={txn.id} t={txn} delTxn={delTxn} markEditable={markEditable} />
+                    ))}
+                </tbody>
+            </table>
+
         </section>
     );
 };
